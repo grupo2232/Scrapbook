@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mi Scrapbook Digital</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f0f0; margin: 0; padding: 20px; }
+    .scrapbook { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);}
+    .photo { width: 150px; margin: 10px; border: 2px solid #ccc; border-radius: 4px; }
+    .note { margin: 10px; padding: 10px; background: #fffae6; border: 1px solid #dcdcdc; border-radius: 4px; max-width: 300px; }
+    .controls { margin-bottom: 20px; }
+    .controls input, .controls textarea { margin: 5px 0; width: 100%; padding: 8px; box-sizing: border-box; }
+    .controls button { padding: 10px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .controls button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+
+  <div class="scrapbook">
+    <h1>Mi Scrapbook Digital</h1>
+
+    <div class="controls">
+      <label>Sube una foto:</label>
+      <input type="file" id="photoInput" accept="image/*" />
+      
+      <label>Escribe una nota:</label>
+      <textarea id="noteInput" rows="3" placeholder="Escribe algo aquí..."></textarea>
+      
+      <button id="addBtn">Agregar al scrapbook</button>
+    </div>
+
+    <div id="scrapbookContent"></div>
+  </div>
+
+  <script>
+    //const photoInput = document.getElementById('photoInput');
+const noteInput = document.getElementById('noteInput');
+const addBtn = document.getElementById('addBtn');
+const scrapbookContent = document.getElementById('scrapbookContent');
+
+addBtn.addEventListener('click', () => {
+  // Crear un contenedor para la entrada nueva
+  const entryDiv = document.createElement('div');
+  
+  // Si hay foto, crear elemento img
+  if (photoInput.files.length > 0) {
+    const file = photoInput.files[0];
+    const img = document.createElement('img');
+    img.classList.add('photo');
+    
+    // Leer la imagen con FileReader para mostrarla
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    entryDiv.appendChild(img);
+  }
+  
+  // Si hay nota, crear un div para texto
+  const noteText = noteInput.value.trim();
+  if (noteText) {
+    const noteDiv = document.createElement('div');
+    noteDiv.classList.add('note');
+    noteDiv.textContent = noteText;
+    entryDiv.appendChild(noteDiv);
+  }
+  
+  // Agregar la nueva entrada al contenido del scrapbook
+  if (entryDiv.childNodes.length > 0) {
+    scrapbookContent.appendChild(entryDiv);
+  } else {
+    alert('Por favor, sube una foto o escribe una nota.');
+  }
+  
+  // Limpiar inputs
+  photoInput.value = '';
+  noteInput.value = '';
+});
+
+  </script>
+
+</body>
+</html>
